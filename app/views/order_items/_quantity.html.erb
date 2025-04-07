@@ -1,5 +1,5 @@
 <div id="order_item_<%= product.id %>_quantity" class="flex items-center space-x-4">
-  <% if logged_in? %>
+  <% if user_signed_in? %>
     <%= form_with url: order_item_path(order_item), method: :patch, data: { turbo_frame: "_top" } do |f| %>
       <div class="flex items-center space-x-3">
         <%= f.button "-", name: "order_item[quantity]", value: order_item.quantity - 1,

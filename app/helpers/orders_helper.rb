@@ -1,6 +1,6 @@
 module OrdersHelper
   def cart_items_count
-    return session[:cart]&.count || 0 unless logged_in?
+    return session[:cart]&.count || 0 unless user_signed_in?
 
     current_user.orders
                 .by_status(:draft)

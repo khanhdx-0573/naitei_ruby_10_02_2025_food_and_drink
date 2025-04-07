@@ -163,7 +163,7 @@ class OrdersController < ApplicationController
   end
 
   def add_product_to_cart cart, product_id, quantity
-    success = if logged_in?
+    success = if user_signed_in?
                 cart.add_to_cart product_id, quantity
               else
                 cart.add_to_cart_not_logged_in product_id, quantity

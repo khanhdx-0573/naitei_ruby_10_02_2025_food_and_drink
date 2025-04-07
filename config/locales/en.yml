@@ -57,6 +57,14 @@ en:
               blank: :blank
               invalid: :invalid
               too_large: "File size is too large, maximum is 5MB"
+        user:
+          attributes:
+            password:
+              too_short: "is too short (minimum %{count} characters)"
+            password_confirmation:
+              confirmation: "doesn't match Password"
+            email:
+              taken: "đã được sử dụng"
       messages:
         blank: "can't be blank"
         invalid: "is invalid"
