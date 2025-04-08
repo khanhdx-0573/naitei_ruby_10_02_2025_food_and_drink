@@ -12,11 +12,13 @@
   <body class="min-h-screen bg-gray-50">
     <%= render "layouts/header" %>
     <% flash.each do |type, message| %>
-      <div class="p-4 mb-4 text-white <%= type == "success" ? "bg-blue-500" : "bg-red-500" %>">
+      <div class="p-4 text-white <%= type == "success" ? "bg-blue-500" : "bg-red-500" %>">
         <%= message %>
       </div>
     <% end %>
-    <%= yield %>
+    <main>
+      <%= yield %>
+    </main>
     <%= render "layouts/footer" %>
   </body>
 </html>

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   include SessionsHelper
+  include DeviseHelper
   before_action :set_locale
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
@@ -11,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in_user?
-    return if logged_in?
+    return if user_signed_in?
 
     flash[:danger] = t "user.please_login"
     redirect_to login_path

@@ -1,0 +1,17 @@
+<div class="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full bg-white shadow-md rounded-lg py-10 px-8">
+    <div class="mb-6 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4"><%= t "devise.mailer.confirmation_instructions.subject" %></h2>
+      <p class="text-gray-700"><%= t("devise.mailer.confirmation_instructions.greeting", email: @email) %></p>
+    </div>
+
+    <div class="mb-6 text-center">
+      <p class="text-gray-700"><%= t "devise.mailer.confirmation_instructions.instruction" %></p>
+      <%= link_to t("devise.mailer.confirmation_instructions.action"), confirmation_url(@resource, confirmation_token: @token), class: "mailer-link" %>
+    </div>
+
+    <div class="text-center">
+      <p class="text-gray-700"><%= t "devise.mailer.confirmation_instructions.signature" %></p>
+    </div>
+  </div>
+</div>

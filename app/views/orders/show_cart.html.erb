@@ -21,12 +21,12 @@
         <%= render "order_items/cart_total", total_price: @total_price %>
 
         <div class="mt-6">
-          <% if logged_in? %>
+          <% if user_signed_in? %>
             <%= link_to checkout_path(@order, user_id: @order.user.id), class: "w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700" do %>
               <%= t "order.checkout" %>
             <% end %>
           <% else %>
-            <%= link_to login_path, class: "w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700" do %>
+            <%= link_to new_user_session_path, class: "w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700" do %>
               <%= t "order.checkout" %>
             <% end %>
           <% end %>

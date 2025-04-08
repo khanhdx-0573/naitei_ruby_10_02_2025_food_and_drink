@@ -59,6 +59,7 @@ group :test do
 end
 
 gem "active_storage_validations", "0.9.8"
+gem "devise"
 gem "image_processing", "1.12.2"
 gem "pagy"
 gem "paranoia", "~> 2.1", ">= 2.1.5"

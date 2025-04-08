@@ -57,6 +57,14 @@ vi:
               blank: :blank
               invalid: :invalid
               too_large: "kích thước quá lớn, tối đa là 5MB"
+        user:
+          attributes:
+            password:
+              too_short: "quá ngắn (tối thiểu %{count} ký tự)"
+            password_confirmation:
+              confirmation: "không khớp với mật khẩu"
+            email:
+              taken: "đã được sử dụng"
       messages:
         blank: "không được để trống"
         invalid: "không hợp lệ"
