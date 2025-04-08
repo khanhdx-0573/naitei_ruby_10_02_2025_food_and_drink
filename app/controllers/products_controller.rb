@@ -1,11 +1,13 @@
 class ProductsController < ApplicationController
   before_action :find_product, only: :show
   def show
+    authorize! :read, @product
     @reviews = @product.reviews.includes(order: :user)
     @avg_rating = calculate_avg_rating @product.id
   end
 
   def index
+    authorize! :read, Product
     @categories = Category.all
     products = Product.by_category params[:category_id]
     products = products.by_name(params[:name]).by_sort(params[:sort])

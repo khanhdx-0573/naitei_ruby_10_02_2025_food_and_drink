@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
+  include CanCan::ControllerAdditions
   include SessionsHelper
   include DeviseHelper
   before_action :set_locale
@@ -19,9 +20,16 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_admin
-    return if current_user.admin?
+    authorize! :manage_product, Product
+    authorize! :manage_order, Order
+  end
 
-    flash[:danger] = t "user.permission_denied"
-    redirect_to root_path
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.html do
+        flash[:danger] = exception.message
+        redirect_to root_path
+      end
+    end
   end
 end

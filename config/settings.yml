@@ -19,7 +19,7 @@ max_name_length: 100
 max_email_length: 100
 valid_email_regex: \A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z
 min_password_length: 6
-pagy_items: 5
+pagy_items: 8
 home_page_items: 4
 image_types: ["image/jpeg", "image/png", "image/gif"]
 max_image_size: 5

@@ -1,8 +1,6 @@
 class Admin::OrdersController < ApplicationController
-  before_action :logged_in_user?
   before_action :authorize_admin
   before_action :find_order, only: %i(update destroy)
-
   def index
     @pagy, @orders = pagy Order
                      .includes(:order_items)

@@ -1,11 +1,9 @@
 class OrdersController < ApplicationController
-  before_action :logged_in_user?,
-                only: %i(edit update view_history cancel_order)
-  before_action :correct_user, only: %i(edit update view_history cancel_order)
   before_action :find_product, only: :review_product
   before_action :find_order_draft, only: %i(edit update)
   before_action :find_order_cancel, only: :cancel_order
-  before_action :find_delivered_order, only: :review_product
+  before_action :find_delivered_order,
+                only: %i(review_product review_product_post)
   before_action :check_exist_review,
                 only: %i(review_product review_product_post)
   def create
@@ -19,6 +17,7 @@ class OrdersController < ApplicationController
 
   def show_cart
     @order = Order.find_by user_id: params[:user_id], status: :draft
+    authorize! :show_cart, @order
     if @order.nil?
       flash[:danger] = t "order.cart_empty"
       redirect_to root_path
@@ -48,12 +47,14 @@ class OrdersController < ApplicationController
   end
 
   def edit
+    authorize! :edit, @order
     @order_items = @order.order_items.includes :product
     @products = Product.by_ids @order_items.map(&:product_id)
     @total_price = calculate_total_price @order_items
   end
 
   def update
+    authorize! :update, @order
     if @order.update order_params.merge(status: :pending)
       flash[:success] = t "order.pending"
       redirect_to root_path
@@ -73,10 +74,12 @@ class OrdersController < ApplicationController
                                .not_draft
                                .order_by_created_at,
                           limit: Settings.pagy_items
+    authorize! :view_history, @orders.first
     @orders = @orders.by_status(params[:status])
   end
 
   def cancel_order
+    authorize! :cancel_order, @order
     if @order.update status: :canceled
       flash[:success] = t "order.cancel_success"
     else
@@ -86,10 +89,12 @@ class OrdersController < ApplicationController
   end
 
   def review_product
+    authorize! :review_product, @order
     @review = Review.new
   end
 
   def review_product_post
+    authorize! :review_product, @order
     @review = Review.new review_product_params
     if @review.save
       flash[:success] = t "review.review_success"
@@ -100,13 +105,6 @@ class OrdersController < ApplicationController
     end
   end
   private
-
-  def correct_user
-    return if current_user.id == params[:user_id].to_i
-
-    flash[:danger] = t "user.permission_denied"
-    redirect_to root_path
-  end
 
   def review_product_params
     params.require(:review).permit Review::REVIEW_PARAMS
@@ -121,7 +119,7 @@ class OrdersController < ApplicationController
   end
 
   def find_order
-    @order = Order.find_by id: params[:id]
+    @order = Order.find_by(id: params[:id] || params[:order_id])
   end
 
   def find_order_draft
