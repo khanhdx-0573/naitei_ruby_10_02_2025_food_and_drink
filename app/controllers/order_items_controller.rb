@@ -1,5 +1,6 @@
 class OrderItemsController < ApplicationController
   before_action :find_order_item, only: %i(update destroy)
+  authorize_resource only: %i(update destroy)
 
   def update
     if @order_item.product.deleted? == false &&
