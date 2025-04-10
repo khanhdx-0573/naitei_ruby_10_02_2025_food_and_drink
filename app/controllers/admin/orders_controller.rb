@@ -2,13 +2,10 @@ class Admin::OrdersController < ApplicationController
   before_action :authorize_admin
   before_action :find_order, only: %i(update destroy)
   def index
-    @pagy, @orders = pagy Order
-                     .includes(:order_items)
-                     .includes(:products)
-                     .includes(:user)
-                     .not_draft,
-                          limit: Settings.pagy_items
-    @orders = @orders.by_date(params[:date]).by_status(params[:status])
+    @q = Order.ransack(params[:q])
+    @orders = Order.includes(:order_items).includes(:products)
+                   .includes(:user).not_draft
+    @pagy, @orders = pagy @orders.filtered(params), limit: Settings.pagy_items
   end
 
   def update

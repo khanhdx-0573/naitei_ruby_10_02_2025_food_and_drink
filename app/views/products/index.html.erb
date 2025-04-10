@@ -2,21 +2,40 @@
   <h1 class="text-3xl font-bold mb-6">
     <%= t "product.name" %>
   </h1>
-  <%= form_with url: products_path, method: :get, local: true, class: "flex flex-col md:flex-row gap-4 mb-8" do %>
+  <%= search_form_for @q, url: products_path, method: :get, html: { class: "flex flex-col md:flex-row gap-4 mb-8" } do |f| %>
     <%= hidden_field_tag :category_id, params[:category_id] %>
+
     <div class="relative flex-1">
       <i class="fa-solid fa-search absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
-      <%= search_field_tag :name, params[:name], placeholder: t("product.search_placeholder"),
+      <%= f.search_field :name_or_categories_name_cont,
+            placeholder: t("product.search_placeholder"),
             class: "w-full pl-9 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
     </div>
 
     <div class="flex gap-2">
-      <%= select_tag :sort, options_for_select(Product::SORT_OPTIONS, params[:sort]),
+      <%= f.select :by_sort, Product::SORT_OPTIONS, {include_blank: false},
           class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      <div class="flex flex-col md:flex-row items-center gap-2">
+        <%= f.label :price_gteq, t("product.price_from"), class: "text-sm text-gray-600" %>
+        <%= f.search_field :price_gteq, min: Settings.min_price, max: Settings.max_price,
+            class: "input-field p-1"%>
 
-      <%= submit_tag t("product.filter"), class: "flex items-center px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50" %>
+        <%= f.label :price_lteq, t("product.price_to"), class: "text-sm text-gray-600" %>
+        <%= f.search_field :price_lteq, min: Settings.min_price, max: Settings.max_price,
+            class: "input-field p-1"%>
+      </div>
+      <% if current_user&.admin %>
+        <div class="flex flex-col md:flex-row items-center gap-2">
+          <%= f.label :updated_at_eq, "Ngày cập nhật", class: "text-sm text-gray-600" %>
+          <%= f.date_field :updated_at_eq,
+              class: "input-field p-1" %>
+        </div>
+      <% end %>
+
+      <%= f.submit t("product.filter"), class: "flex items-center px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50" %>
     </div>
   <% end %>
+
   <div class="flex flex-wrap gap-2 mb-6">
     <%= link_to t("all"), products_path(request.query_parameters.except(:category_id, :page)),
       class: "category-pill px-3 py-1 rounded-full text-sm #{params[:category_id].present? ? "bg-gray-100 text-gray-700 hover:bg-gray-200" : "bg-blue-600 text-white"}" %>

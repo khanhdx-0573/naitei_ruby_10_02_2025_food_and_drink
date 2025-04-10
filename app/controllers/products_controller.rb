@@ -9,9 +9,10 @@ class ProductsController < ApplicationController
   def index
     authorize! :read, Product
     @categories = Category.all
-    products = Product.by_category params[:category_id]
-    products = products.by_name(params[:name]).by_sort(params[:sort])
-    @pagy, @products = pagy products, limit: Settings.pagy_items
+    @q = Product.ransack(params[:q], auth_object: current_user)
+    @pagy, @products = pagy Product.with_attached_image
+                                   .filtered(params, current_user),
+                            limit: Settings.pagy_items
   end
   private
   def find_product

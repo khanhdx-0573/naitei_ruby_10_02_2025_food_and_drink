@@ -35,9 +35,6 @@ class Product < ApplicationRecord
       joins(:product_categories).where(product_categories: {category_id:})
     end
   }
-  scope :by_name, lambda {|name|
-    where "LOWER(name) LIKE ?", "%#{name.downcase}%" if name.present?
-  }
   scope :by_date_updated, ->{order updated_at: :desc}
   scope :by_sort, lambda {|sort|
     sort_options = {
@@ -48,10 +45,37 @@ class Product < ApplicationRecord
     }
     order(sort_options[sort])
   }
+
+  scope :filtered, lambda {|params, user|
+    ransack(params[:q], auth_object: user)
+      .result
+      .by_category(params[:category_id])
+      .distinct
+  }
   scope :featured_products, (lambda do
     joins(:order_items)
       .group("products.id")
       .order("COUNT(order_items.id) DESC")
       .limit(Settings.home_page_items)
   end)
+
+  ransacker :updated_at, type: :date do
+    Arel.sql("DATE(products.updated_at)")
+  end
+
+  def self.ransackable_attributes auth_object
+    if auth_object&.admin?
+      %w(name price updated_at)
+    else
+      %w(name price)
+    end
+  end
+
+  def self.ransackable_associations _auth_object = nil
+    %w(categories)
+  end
+
+  def self.ransackable_scopes _auth_object = nil
+    %i(by_sort)
+  end
 end
