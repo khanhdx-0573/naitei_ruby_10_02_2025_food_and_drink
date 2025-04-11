@@ -142,6 +142,8 @@ vi:
     update_fail: "Cập nhật sản phẩm thất bại, vui lòng kiểm tra lại thông tin"
     confirm_delete_title: "Xác nhận xóa sản phẩm"
     confirm_delete_message: "Bạn có chắc chắn muốn xóa sản phẩm này không?"
+    price_from: "Giá từ"
+    price_to: "đến"
     price: "Giá"
     sort:
       default: "Sắp xếp"

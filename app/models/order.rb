@@ -32,12 +32,28 @@ class Order < ApplicationRecord
   scope :by_status, lambda {|status|
     where(status:) if status.present?
   }
-  scope :by_date, lambda {|date|
-    where created_at: date.to_date.all_day if date.present?
+  scope :filtered, lambda {|params|
+    ransack(params[:q]).result
   }
+  ransacker :created_at, type: :date do
+    Arel.sql("DATE(created_at)")
+  end
+
   def calculate_total_price
     order_items.sum do |order_item|
       order_item.quantity * order_item.unit_price
     end
+  end
+
+  def self.ransackable_attributes _auth_object = nil
+    %w(status created_at)
+  end
+
+  def self.ransackable_scopes _auth_object = nil
+    %i(by_status)
+  end
+
+  def self.ransackable_associations _auth_object = nil
+    %w(order_items products reviews user)
   end
 end

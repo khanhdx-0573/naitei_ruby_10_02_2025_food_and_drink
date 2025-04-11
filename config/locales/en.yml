@@ -142,6 +142,8 @@ en:
     update_fail: "Update product failed, please try again"
     confirm_delete_title: "Delete confirmation"
     confirm_delete_message: "Are you sure you want to delete this product?"
+    price_from: "Price from"
+    price_to: "to"
     price: "Giá"
     sort:
       default: "Sort"
