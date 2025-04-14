@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :find_product, only: :review_product
+  before_action :find_product, only: %i(review_product review_product_post)
   before_action :find_order_draft, only: %i(edit update)
   before_action :find_order_cancel, only: :cancel_order
   before_action :find_delivered_order,
@@ -100,7 +100,6 @@ class OrdersController < ApplicationController
       flash[:success] = t "review.review_success"
       redirect_to view_history_path(current_user.id)
     else
-      find_product
       render :review_product, status: :unprocessable_entity
     end
   end
