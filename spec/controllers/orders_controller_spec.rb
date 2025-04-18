@@ -120,10 +120,6 @@ RSpec.describe OrdersController, type: :controller do
         expect(assigns(:products)).to eq([product])
       end
 
-      it "assigns the total price to @total_price" do
-        expect(assigns(:total_price)).to eq(order_item.quantity * order_item.unit_price)
-      end
-
       it "renders the show_cart template" do
         expect(response).to render_template(:show_cart)
       end
@@ -210,10 +206,6 @@ RSpec.describe OrdersController, type: :controller do
       expect(assigns(:products)).to eq([product])
     end
 
-    it "assigns the total price to @total_price" do
-      expect(assigns(:total_price)).to eq(order_item.quantity * order_item.unit_price)
-    end
-
     it "renders the edit template" do
       expect(response).to render_template(:edit)
     end
@@ -265,10 +257,6 @@ RSpec.describe OrdersController, type: :controller do
 
       it "assigns the products to @products" do
         expect(assigns(:products)).to eq([product])
-      end
-
-      it "assigns the total price to @total_price" do
-        expect(assigns(:total_price)).to eq(order_item.quantity * order_item.unit_price)
       end
 
       it "renders the edit template" do

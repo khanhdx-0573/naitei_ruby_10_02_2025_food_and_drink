@@ -28,5 +28,24 @@ Rails.application.routes.draw do
       resources :orders
       resources :products
     end
+
+    namespace :api do
+      namespace :v1 do
+        resources :orders
+        get "/guest_cart", to: "orders#show_guest_cart"
+        get "/cart/:user_id", to: "orders#show_cart"
+        get "/checkout/:id", to: "orders#edit"
+        patch "/checkout/:id", to: "orders#update"
+        get "users/:user_id/orders/history", to: "orders#view_history", as: "view_history"
+        patch "/orders/cancel_order/:id", to: "orders#cancel_order", as: "cancel_order"
+        get "orders/:id/review-product/:product_id", to: "orders#review_product"
+        post "orders/:id/review-product/:product_id", to: "orders#review_product_post"
+
+        devise_scope :user do
+          post "/log_in", to: "sessions#create"
+          delete "/log_out", to: "sessions#destroy"
+        end
+      end
+    end
   end
 end

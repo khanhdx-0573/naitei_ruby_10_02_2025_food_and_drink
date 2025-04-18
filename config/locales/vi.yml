@@ -106,6 +106,9 @@ vi:
       fast_delivery:
         title: "Giao hàng nhanh chóng"
         description: "Giao hàng tận nơi trong vòng 30 phút"
+  error_response:
+    unauthorized: "Bạn không có quyền truy cập vào trang này."
+    invalid_credentials: "Thông tin đăng nhập không hợp lệ."
   english: "Tiếng Anh"
   vietnamese: "Tiếng Việt"
   hello: "Xin chào"

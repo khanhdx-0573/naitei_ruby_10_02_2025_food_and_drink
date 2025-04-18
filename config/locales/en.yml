@@ -106,6 +106,9 @@ en:
       fast_delivery:
         title: "Fast Delivery"
         description: "Get delivery within 30 minutes"
+  error_response:
+    unauthorized: "You are not authorized to access this page"
+    invalid_credentials: "Invalid login credentials"
   english: "English"
   vietnamese: "Vietnamese"
   hello: "Hello"

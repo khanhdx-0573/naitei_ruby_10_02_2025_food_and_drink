@@ -3,13 +3,18 @@ class OrderItemsController < ApplicationController
   authorize_resource only: %i(update destroy)
 
   def update
-    if @order_item.product.deleted? == false &&
-       @order_item.update(update_quantity_params)
-      total_price = @order_item.order.calculate_total_price
-      render_turbo_stream @order_item, total_price
-    else
-      flash[:danger] = t "order_item.update_fail"
-      redirect_to cart_path(current_user)
+    if @order_item.product.deleted?
+      handle_update_error
+      return
+    end
+    begin
+      Order.transaction do
+        @order_item.update!(update_quantity_params)
+        @order_item.order.update_total_price!
+      end
+      render_turbo_stream @order_item, @order_item.order.total_price
+    rescue ActiveRecord::RecordInvalid
+      handle_update_error
     end
   end
 
@@ -30,13 +35,14 @@ class OrderItemsController < ApplicationController
   end
 
   def destroy
-    if @order_item.destroy
-      total_price = @order_item.order.calculate_total_price
-      render_turbo_stream_destroy @order_item.product, total_price
-    else
-      flash[:danger] = t "order_items.remove_fail"
-      redirect_to root_path
+    Order.transaction do
+      @order_item.destroy!
+      @order_item.order.update_total_price!
     end
+    render_turbo_stream_destroy @order_item.product,
+                                @order_item.order.total_price
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotDestroyed
+    handle_destroy_error
   end
 
   def remove_guest_cart_item
@@ -111,5 +117,15 @@ class OrderItemsController < ApplicationController
                            partial: "order_items/cart_total",
                            locals: {total_price:})
     ]
+  end
+
+  def handle_update_error
+    flash[:danger] = t "order_item.update_fail"
+    redirect_to cart_path(current_user)
+  end
+
+  def handle_destroy_error
+    flash[:danger] = t "order_item.remove_fail"
+    redirect_to cart_path(current_user)
   end
 end

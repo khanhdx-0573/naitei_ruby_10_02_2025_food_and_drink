@@ -26,6 +26,9 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
+      format.json do
+        render json: {error: exception.message}, status: :forbidden
+      end
       format.html do
         flash[:danger] = exception.message
         redirect_to root_path

@@ -1,5 +1,5 @@
 class Review < ApplicationRecord
-  REVIEW_PARAMS = %i(rating comment product_id order_id).freeze
+  REVIEW_PARAMS = %i(rating comment).freeze
   validates :rating, presence: true,
             numericality: {only_integer: true,
                            greater_than_or_equal_to: Settings.min_rating,

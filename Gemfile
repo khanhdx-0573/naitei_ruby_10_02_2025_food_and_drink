@@ -60,10 +60,12 @@ group :test do
   gem "webdrivers"
 end
 
+gem "active_model_serializers"
 gem "active_storage_validations", "0.9.8"
 gem "cancancan", "~> 3.5"
 gem "devise"
 gem "image_processing", "1.12.2"
+gem "jwt"
 gem "pagy"
 gem "paranoia", "~> 2.1", ">= 2.1.5"
 gem "ransack"

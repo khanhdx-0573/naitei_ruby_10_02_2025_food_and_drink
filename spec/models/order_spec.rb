@@ -144,6 +144,19 @@ RSpec.describe Order, type: :model do
       end
     end
 
+    context "#update_total_price!" do
+      let(:order) { create(:order) }
+      let!(:order_item1) { create(:order_item, order: order, quantity: 2, unit_price: 10) }
+      let!(:order_item2) { create(:order_item, order: order, quantity: 3, unit_price: 5) }
+      let(:expected_total) { (2 * 10) + (3 * 5) }
+      before do
+        order.update_total_price!
+      end
+      it "updates the total price" do
+        expect(order.total_price).to eq(expected_total)
+      end
+    end
+
     context ".ransackable_attributes" do
       it "returns the list of ransackable attributes" do
         expect(Order.ransackable_attributes).to eq(%w(status created_at))

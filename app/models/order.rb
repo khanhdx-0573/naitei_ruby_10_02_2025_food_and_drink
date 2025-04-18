@@ -45,6 +45,11 @@ class Order < ApplicationRecord
     end
   end
 
+  def update_total_price!
+    total = calculate_total_price
+    update!(total_price: total)
+  end
+
   def self.ransackable_attributes _auth_object = nil
     %w(status created_at)
   end

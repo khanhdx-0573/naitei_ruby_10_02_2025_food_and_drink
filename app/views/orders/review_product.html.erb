@@ -35,9 +35,6 @@
 
         <%= form_with model: @review, url: review_product_post_path, class: "space-y-6" do |form| %>
           <%= render "shared/error_messages", object: form.object %>
-          <%= form.hidden_field :product_id, value: @product.id %>
-          <%= form.hidden_field :order_id, value: params[:id] %>
-
           <div>
             <%= form.label :rating, t("review.rating"), class: "block text-sm font-medium text-gray-700 mb-2" %>
             <div class="flex space-x-1 text-3xl">

@@ -28,6 +28,7 @@ class Ability
 
     can :read, OrderItem, order: {user_id: user.id}
     can :update, OrderItem, order: {user_id: user.id}
+    can :destroy, OrderItem, order: {user_id: user.id}
   end
 
   def define_admin_permissions
